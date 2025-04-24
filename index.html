@@ -1,26 +1,88 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MiniApp</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Игровой МиниПриложение</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 50px;
+      height: 100vh;
+      background-color: #f7f7f7;
+      margin: 0;
     }
-    button {
+
+    .container {
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 300px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 32px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    .result {
+      margin-top: 20px;
       font-size: 18px;
-      padding: 10px 20px;
+      font-weight: bold;
+      color: #ff6347;
+    }
+
+    .error {
+      color: red;
     }
   </style>
 </head>
 <body>
-  <h1>👋 Привет, фермер!</h1>
-  <p>Ты зашёл в WebApp. Скоро здесь будут NFT и коины.</p>
-  <button onclick="alert('Будущее за тобой!')">👀 Нажми</button>
+  <div class="container">
+    <h1>МиниИгра 50/50</h1>
+    <label for="chance">Шанс на выигрыш (в %): </label>
+    <input type="number" id="chance" min="1" max="100" value="50" style="padding: 5px; font-size: 16px; width: 80px; margin-bottom: 20px;">
+    <button class="button" onclick="playGame()">Играть</button>
+    <p class="result" id="result"></p>
+  </div>
+
+  <script>
+    function playGame() {
+      const chance = parseInt(document.getElementById('chance').value);
+      if (isNaN(chance) || chance < 1 || chance > 100) {
+        document.getElementById('result').textContent = "Пожалуйста, введите правильный шанс (от 1 до 100).";
+        document.getElementById('result').classList.add('error');
+        return;
+      }
+
+      // Генерация случайного числа и проверка на выигрыш
+      const randomNum = Math.random() * 100;
+      const result = randomNum < chance ? "Вы выиграли!" : "Попробуйте снова!";
+      
+      document.getElementById('result').textContent = result;
+      document.getElementById('result').classList.remove('error');
+    }
+  </script>
 </body>
 </html>
