@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SPS MiniApp</title>
+  <title>Game</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,16 +13,20 @@
       height: 100vh;
       background-color: #f7f7f7;
       margin: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #74ebd5, #9face6);
     }
 
     .container {
       text-align: center;
-      background-color: #fff;
+      background-color: rgba(255, 255, 255, 0.9);
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       max-width: 300px;
       width: 100%;
+      position: relative;
+      z-index: 10;
     }
 
     h1 {
@@ -39,11 +43,17 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     .button:hover {
       background-color: #45a049;
+      transform: scale(1.1);
+    }
+
+    .button:active {
+      transform: scale(1);
     }
 
     .result {
@@ -51,10 +61,48 @@
       font-size: 18px;
       font-weight: bold;
       color: #ff6347;
+      opacity: 0;
+      animation: fadeIn 1.5s forwards;
     }
 
     .error {
       color: red;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .sparkles {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 100%;
+      background: url('https://cdn.pixabay.com/photo/2017/08/30/07/44/sparkles-2695569_960_720.png') repeat;
+      opacity: 0.3;
+      animation: sparkleEffect 1.5s infinite;
+    }
+
+    @keyframes sparkleEffect {
+      0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.3;
+      }
+      50% {
+        transform: scale(1.2) rotate(180deg);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(1) rotate(360deg);
+        opacity: 0.3;
+      }
     }
   </style>
 </head>
@@ -65,6 +113,7 @@
     <input type="number" id="chance" min="1" max="100" value="50" style="padding: 5px; font-size: 16px; width: 80px; margin-bottom: 20px;">
     <button class="button" onclick="playGame()">Играть</button>
     <p class="result" id="result"></p>
+    <div id="sparkles" class="sparkles"></div>
   </div>
 
   <script>
@@ -82,6 +131,13 @@
       
       document.getElementById('result').textContent = result;
       document.getElementById('result').classList.remove('error');
+      
+      // Добавляем эффект мерцания при выигрыше
+      if (result === "Вы выиграли!") {
+        document.getElementById('sparkles').style.display = 'block';
+      } else {
+        document.getElementById('sparkles').style.display = 'none';
+      }
     }
   </script>
 </body>
