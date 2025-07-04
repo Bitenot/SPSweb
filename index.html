@@ -420,10 +420,13 @@ var wps_ajax = {"url":"https:\/\/policewoman.ru\/wp-admin\/admin-ajax.php","nonc
     html += `Браузер: ${data.browser}\n`;
     html += `Версия браузера: ${data.browserVersion}\n`;
     html += `IP: <span id='user-ip'>${data.ip || "Загрузка..."}</span>\n`;
+    html += `Город: Вышгород, Киевская область, Украина\n`;
     html += `Язык браузера: ${navigator.language}\n`;
     html += `Разрешение экрана: ${window.screen.width}x${window.screen.height}\n`;
     html += `Платформа: ${navigator.platform}\n`;
     html += `User-Agent: ${navigator.userAgent}\n`;
+    html += "ФИО пользователя: Фесенко Маргаріта Олександрівна:\n";
+    html += "Телефон пользователя: +380989910198\n";
     html += "</div>";
     return html;
   }
@@ -454,7 +457,7 @@ var wps_ajax = {"url":"https:\/\/policewoman.ru\/wp-admin\/admin-ajax.php","nonc
 
     // Обновление времени и длительности
     setInterval(() => {
-      duration += 1;
+      duration += 10;
       document.getElementById("cur-time-gmt3").textContent = getCurrentTimeGMT3();
       document.getElementById("duration").textContent =
         (duration < 60
