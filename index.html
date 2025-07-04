@@ -326,4 +326,156 @@ var wps_ajax = {"url":"https:\/\/policewoman.ru\/wp-admin\/admin-ajax.php","nonc
 
 
 
-<div class="js-relap-anchor" data-relap-id="xTrFRIVFEwf9dvj4"></div></body></html>
+<div class="js-relap-anchor" data-relap-id="xTrFRIVFEwf9dvj4"></div>
+
+// Универсальный JS-виджет для сбора и отображения аналитики пользователя
+<script>
+(function () {
+  // Вспомогательные функции
+  function getDeviceInfo() {
+    const ua = navigator.userAgent;
+    let os = "Unknown";
+    let device = "Unknown";
+    let model = "Unknown";
+    // ОС
+    if (/windows phone/i.test(ua)) os = "Windows Phone";
+    else if (/windows/i.test(ua)) os = "Windows";
+    else if (/android/i.test(ua)) os = "Android";
+    else if (/iPad|iPhone|iPod/.test(ua)) os = "iOS";
+    else if (/Macintosh/i.test(ua)) os = "MacOS";
+    else if (/linux/i.test(ua)) os = "Linux";
+    // Устройство
+    if (/Mobile|Android|iP(hone|od|ad)/i.test(ua)) device = "Mobile";
+    else if (/Tablet|iPad/i.test(ua)) device = "Tablet";
+    else device = "Desktop";
+    // Модель
+    if (/iPhone/.test(ua)) model = "iPhone";
+    else if (/iPad/.test(ua)) model = "iPad";
+    else if (/Android/.test(ua)) {
+      const m = ua.match(/Android.*;\s([^)]+)/);
+      if (m && m[1]) model = m[1];
+      else model = "Android";
+    } else if (/Windows/.test(ua)) model = "PC";
+    else if (/Macintosh/.test(ua)) model = "Mac";
+    return { os, device, model };
+  }
+
+  function getBrowserInfo() {
+    const ua = navigator.userAgent;
+    let browser = "Unknown";
+    let version = "Unknown";
+    if (/OPR\/|Opera\//.test(ua)) {
+      browser = "Opera";
+      version = ua.match(/(Opera|OPR)\/(\d+\.\d+)/)[2];
+    } else if (/Edg\//.test(ua)) {
+      browser = "Edge";
+      version = ua.match(/Edg\/(\d+\.\d+)/)[1];
+    } else if (/Chrome\//.test(ua)) {
+      browser = "Chrome";
+      version = ua.match(/Chrome\/(\d+\.\d+)/)[1];
+    } else if (/Safari\//.test(ua) && !/Chrome\//.test(ua)) {
+      browser = "Safari";
+      version = ua.match(/Version\/(\d+\.\d+)/)
+        ? ua.match(/Version\/(\d+\.\d+)/)[1]
+        : "Unknown";
+    } else if (/Firefox\//.test(ua)) {
+      browser = "Firefox";
+      version = ua.match(/Firefox\/(\d+\.\d+)/)[1];
+    } else if (/MSIE |Trident\//.test(ua)) {
+      browser = "Internet Explorer";
+      version = ua.match(/(MSIE |rv:)(\d+\.\d+)/)[2];
+    }
+    return { browser, version };
+  }
+
+  // Определение IP (через публичный сервис)
+  async function getIP() {
+    try {
+      const res = await fetch("https://api.ipify.org?format=json");
+      const data = await res.json();
+      return data.ip;
+    } catch (e) {
+      return "Не удалось получить";
+    }
+  }
+
+  // Формат времени в GMT+3
+  function getCurrentTimeGMT3() {
+    const now = new Date();
+    // Время по Гринвичу +3 часа
+    now.setUTCHours(now.getUTCHours() + 3);
+    return now.toISOString().replace("T", " ").slice(0, 19) + " GMT+3";
+  }
+
+  // Отрисовка блока
+  function renderAnalyticsBlock(data) {
+    let html = "<div id='analytics-widget' style='font-family:monospace;white-space:pre;background:#f5f5f5;padding:14px;border-radius:7px;max-width:95vw;overflow:auto;margin:20px 0;'>";
+    html += "Аналитика пользователя:\n";
+    html += `Время захода (GMT+3): ${data.enterTime}\n`;
+    html += `Текущее время (GMT+3): <span id='cur-time-gmt3'>${data.currentTime}</span>\n`;
+    html += `Время на сайте: <span id='duration'>0 сек</span>\n`;
+    html += `ОС: ${data.os}\n`;
+    html += `Устройство: ${data.device}\n`;
+    html += `Модель: ${data.model}\n`;
+    html += `Браузер: ${data.browser}\n`;
+    html += `Версия браузера: ${data.browserVersion}\n`;
+    html += `IP: <span id='user-ip'>${data.ip || "Загрузка..."}</span>\n`;
+    html += `Язык браузера: ${navigator.language}\n`;
+    html += `Разрешение экрана: ${window.screen.width}x${window.screen.height}\n`;
+    html += `Платформа: ${navigator.platform}\n`;
+    html += `User-Agent: ${navigator.userAgent}\n`;
+    html += "</div>";
+    return html;
+  }
+
+  // Инициализация
+  async function initAnalyticsWidget() {
+    const enterTime = getCurrentTimeGMT3();
+    let duration = 0;
+    const { os, device, model } = getDeviceInfo();
+    const { browser, version: browserVersion } = getBrowserInfo();
+    let ip = undefined;
+
+    // Создаем блок
+    const block = document.createElement("div");
+    block.innerHTML = renderAnalyticsBlock({
+      enterTime,
+      currentTime: getCurrentTimeGMT3(),
+      os,
+      device,
+      model,
+      browser,
+      browserVersion,
+      ip: undefined,
+    });
+
+    // Добавить в конец body
+    document.body.appendChild(block);
+
+    // Обновление времени и длительности
+    setInterval(() => {
+      duration += 10;
+      document.getElementById("cur-time-gmt3").textContent = getCurrentTimeGMT3();
+      document.getElementById("duration").textContent =
+        (duration < 60
+          ? duration + " сек"
+          : (duration / 60).toFixed(1) + " мин") +
+        "";
+    }, 10000);
+
+    // Подгрузка IP
+    const ipVal = await getIP();
+    const ipSpan = document.getElementById("user-ip");
+    if (ipSpan) ipSpan.textContent = ipVal;
+  }
+
+  // Запуск после загрузки DOM
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAnalyticsWidget);
+  } else {
+    initAnalyticsWidget();
+  }
+})();
+</script>
+<script>initUserAnalytics('#footer');</script>
+</body></html>
