@@ -3,112 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Книжный каталог автора</title>
+    <title>Eden English - Новелла</title>
     <style>
         :root {
             --tg-theme-bg-color: #ffffff;
             --tg-theme-text-color: #000000;
+            --tg-theme-secondary-bg-color: #f0f0f0;
+            --tg-theme-hint-color: #707579;
+            --tg-theme-link-color: #2481cc;
             --tg-theme-button-color: #2481cc;
             --tg-theme-button-text-color: #ffffff;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--tg-theme-bg-color);
             color: var(--tg-theme-text-color);
             margin: 0;
-            padding: 20px;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--tg-theme-text-color);
-        }
-        
-        .book-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .book-btn {
-            display: block;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-theme-button-text-color);
-            text-align: center;
-            padding: 12px 20px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border: none;
-            cursor: pointer;
+            padding: 0;
+            line-height: 1.6;
             font-size: 16px;
         }
         
-        .book-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 15px;
         }
         
-        .social-links {
-            margin-top: 30px;
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: var(--tg-theme-bg-color);
+            padding: 15px 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
+            align-items: center;
+            justify-content: space-between;
         }
         
-        .social-btn {
-            background-color: #f0f0f0;
-            color: #333;
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: background-color 0.2s;
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--tg-theme-button-color);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
-        .social-btn:hover {
-            background-color: #e0e0e0;
+        .title {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+            text-align: center;
+            flex-grow: 1;
         }
         
-        footer {
+        .novel-content {
+            padding: 20px 0;
+            white-space: pre-line;
+        }
+        
+        .chapter {
+            margin-bottom: 40px;
+        }
+        
+        .chapter-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--tg-theme-link-color);
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--tg-theme-secondary-bg-color);
+        }
+        
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        
+        .footer {
             margin-top: 40px;
+            padding: 20px 0;
+            border-top: 1px solid var(--tg-theme-secondary-bg-color);
             text-align: center;
             font-size: 14px;
-            color: #666;
+            color: var(--tg-theme-hint-color);
+        }
+        
+        .progress-container {
+            height: 4px;
+            background-color: var(--tg-theme-secondary-bg-color);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--tg-theme-button-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px 10px;
+            }
+            
+            .title {
+                font-size: 18px;
+            }
+            
+            .chapter-title {
+                font-size: 20px;
+            }
+            
+            p {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="header">
+        <button class="back-btn" id="backBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Назад
+        </button>
+        <h1 class="title">Eden English</h1>
+        <div style="width: 60px;"></div> <!-- Для выравнивания -->
+    </div>
+    
     <div class="container">
-        <h1>Книжный каталог</h1>
-        
-        <div class="book-list">
-            <a href="https://www.wattpad.com/1561128943-the-garden-of-eden-the-beautiful-world" class="book-btn" target="_blank">Eden English</a>
-            <a href="https://www.wattpad.com/1542466604-15-%D0%BB%D0%B5%D1%82-%D0%B1%D0%B5%D0%B7%D1%83%D0%BC%D0%B8%D1%8F-%D0%B8-%D1%81%D1%82%D1%80%D0%B0%D1%81%D1%82%D0%B8-%D0%B3%D0%BB%D0%B0%D0%B2%D0%B0-2-%D1%81%D0%BB%D1%83%D1%85" class="book-btn" target="_blank">The Maddnes and Passhion</a>
-            <a href="https://www.patreon.com/EvelineWriters" class="book-btn" target="_blank">Secret</a>
+        <div class="novel-content" id="novelContent">
+            <!-- Содержимое будет загружено из eden.md -->
+            Загрузка новеллы...
         </div>
         
-        <div class="social-links">
-            <a href="https://www.instagram.com/thermobyte.personal/" class="social-btn" target="_blank">Instagram</a>
-            <a href="https://medium.com/@danielwossink" class="social-btn" target="_blank">Medium</a>
-            <a href="mailto:danielwossink@gmail.com" class="social-btn">Email</a>
+        <div class="footer">
+            © Авторские права защищены
         </div>
-        
-        <footer>
-            © 2023 Авторские книги. Все права защищены.
-        </footer>
+    </div>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
     </div>
     
     <script>
@@ -118,13 +164,91 @@
                 Telegram.WebApp.expand();
                 Telegram.WebApp.enableClosingConfirmation();
                 
-                // Используем цветовую схему Telegram
-                document.documentElement.style.setProperty('--tg-theme-bg-color', Telegram.WebApp.backgroundColor);
-                document.documentElement.style.setProperty('--tg-theme-text-color', Telegram.WebApp.textColor);
-                document.documentElement.style.setProperty('--tg-theme-button-color', Telegram.WebApp.themeParams.button_color);
-                document.documentElement.style.setProperty('--tg-theme-button-text-color', Telegram.WebApp.themeParams.button_text_color);
+                // Применяем тему Telegram
+                applyTelegramTheme();
+                
+                // Обработчик кнопки назад
+                document.getElementById('backBtn').addEventListener('click', function() {
+                    Telegram.WebApp.close();
+                });
             }
+            
+            // Загрузка новеллы
+            loadNovel();
+            
+            // Отслеживание прогресса чтения
+            trackReadingProgress();
         });
+        
+        function applyTelegramTheme() {
+            const root = document.documentElement;
+            if (window.Telegram && window.Telegram.WebApp) {
+                root.style.setProperty('--tg-theme-bg-color', Telegram.WebApp.backgroundColor);
+                root.style.setProperty('--tg-theme-text-color', Telegram.WebApp.textColor);
+                root.style.setProperty('--tg-theme-secondary-bg-color', Telegram.WebApp.themeParams.secondary_bg_color || '#f0f0f0');
+                root.style.setProperty('--tg-theme-hint-color', Telegram.WebApp.themeParams.hint_color || '#707579');
+                root.style.setProperty('--tg-theme-link-color', Telegram.WebApp.themeParams.link_color || '#2481cc');
+                root.style.setProperty('--tg-theme-button-color', Telegram.WebApp.themeParams.button_color || '#2481cc');
+                root.style.setProperty('--tg-theme-button-text-color', Telegram.WebApp.themeParams.button_text_color || '#ffffff');
+            }
+        }
+        
+        function loadNovel() {
+            // В реальном приложении здесь должен быть fetch запрос к eden.md
+            // Для примера используем заглушку
+            
+            fetch('eden.md')
+                .then(response => {
+                    if (!response.ok) throw new Error('Не удалось загрузить новеллу');
+                    return response.text();
+                })
+                .then(text => {
+                    // Форматируем текст для отображения
+                    const formattedText = formatNovelText(text);
+                    document.getElementById('novelContent').innerHTML = formattedText;
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки:', error);
+                    document.getElementById('novelContent').innerHTML = `
+                        <div class="chapter">
+                            <h2 class="chapter-title">Ошибка загрузки</h2>
+                            <p>Не удалось загрузить новеллу. Пожалуйста, попробуйте позже.</p>
+                        </div>
+                    `;
+                });
+        }
+        
+        function formatNovelText(text) {
+            // Простое форматирование - в реальном приложении можно добавить Markdown-парсер
+            const chapters = text.split(/\n## /);
+            let html = '';
+            
+            chapters.forEach((chapter, index) => {
+                if (!chapter.trim()) return;
+                
+                const titleEnd = chapter.indexOf('\n');
+                const title = index === 0 ? chapter.substring(0, titleEnd) : chapter.substring(0, titleEnd);
+                const content = index === 0 ? chapter.substring(titleEnd) : chapter.substring(titleEnd);
+                
+                html += `
+                    <div class="chapter">
+                        <h2 class="chapter-title">${title.trim()}</h2>
+                        ${content.split('\n').filter(p => p.trim()).map(p => `<p>${p.trim()}</p>`).join('')}
+                    </div>
+                `;
+            });
+            
+            return html || `<p>${text.split('\n').filter(p => p.trim()).map(p => `<p>${p.trim()}</p>`).join('')}</p>`;
+        }
+        
+        function trackReadingProgress() {
+            window.addEventListener('scroll', function() {
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrollPercentage = (scrollTop / scrollHeight) * 100;
+                document.getElementById('progressBar').style.width = scrollPercentage + '%';
+            });
+        }
     </script>
 </body>
 </html>
